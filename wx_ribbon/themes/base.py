@@ -79,9 +79,9 @@ class RibbonThemeMixin:
         # frames should be overlay
         if isinstance(self, wx.Frame):
             self.SetBackgroundColour(self.theme.overlay)
-        # panels and buttons should be mantle
+        # panels and buttons should be crust
         if isinstance(self, (wx.Panel, wx.Button)):
-            self.SetBackgroundColour(self.theme.mantle)
+            self.SetBackgroundColour(self.theme.crust)
         
         # update
         self.Update()

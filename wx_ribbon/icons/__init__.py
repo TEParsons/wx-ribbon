@@ -51,7 +51,7 @@ class IconConstantHandler:
 # create icon objects for all base icons
 for light in (Path(__file__).parent / "light").glob("*.svg"):
     # get dark file
-    dark = Path("dark") / light.name
+    dark = (Path(__file__).parent / "dark") / light.name
     # if no dark file, use light
     if not dark.is_file():
         dark = light

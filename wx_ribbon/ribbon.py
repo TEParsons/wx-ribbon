@@ -369,8 +369,6 @@ class FrameRibbonButton(wx.Button, RibbonThemeMixin):
         # initialize
         wx.Button.__init__(self, parent, style=wx.BORDER_NONE | style, size=(w, 44))
         self.SetMinSize((40, 44))
-        # inherit theme
-        self.InheritTheme()
         # set label
         self.SetLabelText(label)
         # set tooltip
@@ -379,26 +377,46 @@ class FrameRibbonButton(wx.Button, RibbonThemeMixin):
             tooltip = f"{label}: {tooltip}"
         self.SetToolTip(tooltip)
         # set icon
-        self.icon = icon
-        self.SetBitmap(
-            self.icon.GetBitmap(height=28, style=self.theme.icons),
-            dir=wx.TOP
-        )
-        self.SetBitmapMargins(8, 8)
+        self.SetIcon(icon)
+        # inherit theme
+        self.InheritTheme()
         # if given, bind callback
         if callback is not None:
             self.Bind(wx.EVT_BUTTON, callback)
         # setup hover behaviour
         self.Bind(wx.EVT_ENTER_WINDOW, self.onHover)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.onHover)
+    
+    def SetIcon(self, icon):
+        """
+        Set the icon for this button (will update with theme).
+
+        Parameters
+        ----------
+        icon : wx_ribbon.icons.RibbonIcon
+            RibbonIcon object containing both light and dark versions of this icon.
+        """
+        self.icon = icon
+    
+    def ApplyTheme(self):
+        RibbonThemeMixin.ApplyTheme(self)
+        # also update icon
+        self.SetBitmap(
+            self.icon.GetBitmap(height=28, style=self.theme.icons),
+            dir=wx.TOP
+        )
+        self.SetBitmapMargins(8, 8)
+
+        self.Update()
+        self.Refresh()
 
     def onHover(self, evt):
         if evt.EventType == wx.EVT_ENTER_WINDOW.typeId:
             # on hover, lighten background
-            self.SetBackgroundColour(self.theme.base)
+            self.SetBackgroundColour(self.theme.mantle)
         else:
             # otherwise, keep same colour as parent
-            self.SetBackgroundColour(self.theme.mantle)
+            self.SetBackgroundColour(self.theme.crust)
 
 
 class FrameRibbonDropdownButton(wx.Panel, RibbonThemeMixin):

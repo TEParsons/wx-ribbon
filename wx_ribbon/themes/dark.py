@@ -7,9 +7,9 @@ class DarkRibbonTheme(BaseRibbonTheme):
     # use dark-mode icons for this theme
     icons = RB_ICONSTYLE_DARK
     # darker background shades
-    overlay = "#101010"
-    crust = "#0c0c0c"
-    mantle = "#060606"
+    overlay = "#222222"
+    crust = "#141414"
+    mantle = "#080808"
     base = "#000000"
     # text in white
     text = "#ffffff"
