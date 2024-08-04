@@ -64,7 +64,6 @@ class RibbonIcon:
                 self._cache[RB_ICONSTYLE_LIGHT][height] = self.light.ConvertToScaledBitmap(
                     size=wx.Size(int(height), int(height))
                 )
-            print(self._cache[RB_ICONSTYLE_LIGHT][height].GetSize())
 
             return self._cache[RB_ICONSTYLE_LIGHT][height]
         # return dark icon if requested
