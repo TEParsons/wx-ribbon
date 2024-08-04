@@ -381,10 +381,10 @@ class FrameRibbonButton(wx.Button, RibbonThemeMixin):
         # set icon
         self.icon = icon
         self.SetBitmap(
-            self.icon.GetBitmap(height=32, style=self.theme.icons),
+            self.icon.GetBitmap(height=28, style=self.theme.icons),
             dir=wx.TOP
         )
-        self.SetBitmapMargins(6, 6)
+        self.SetBitmapMargins(8, 8)
         # if given, bind callback
         if callback is not None:
             self.Bind(wx.EVT_BUTTON, callback)
