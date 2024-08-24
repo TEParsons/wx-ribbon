@@ -110,8 +110,6 @@ class FrameRibbonSection(wx.Panel, RibbonThemeMixin):
     def __init__(self, parent, label=None, icon=None):
         wx.Panel.__init__(self, parent)
         self.ribbon = parent
-        # inherit theme
-        self.InheritTheme()
         # setup sizers
         self.border = wx.BoxSizer(wx.VERTICAL)
         self.SetSizer(self.border)
@@ -125,15 +123,15 @@ class FrameRibbonSection(wx.Panel, RibbonThemeMixin):
             self.labelSizer, border=6, flag=wx.ALIGN_CENTRE | wx.TOP
         )
         # add label icon
-        # self._icon = icons.ButtonIcon(icon, size=16)
-        # self.icon = wx.StaticBitmap(
-        #     self, bitmap=self._icon.bitmap
-        # )
-        # if icon is None:
-        #     self.icon.Hide()
-        # self.labelSizer.Add(
-        #     self.icon, border=6, flag=wx.EXPAND | wx.RIGHT
-        # )
+        self.iconCtrl = wx.StaticBitmap(
+            self, bitmap=wx.Bitmap()
+        )
+        if icon is None:
+            self.iconCtrl.Hide()
+        self.labelSizer.Add(
+            self.iconCtrl, border=6, flag=wx.EXPAND | wx.RIGHT
+        )
+        self.SetIcon(icon)
         # add label text
         if label is None:
             label = ""
@@ -141,9 +139,33 @@ class FrameRibbonSection(wx.Panel, RibbonThemeMixin):
         self.labelSizer.Add(
             self.label, flag=wx.EXPAND
         )
+        # inherit theme
+        self.InheritTheme()
 
         # add space
         self.border.AddSpacer(6)
 
         # dict in which to store buttons
         self.buttons = {}
+    
+    def SetIcon(self, icon):
+        """
+        Set the icon for this section (will update with theme).
+
+        Parameters
+        ----------
+        icon : wx_ribbon.icons.RibbonIcon
+            RibbonIcon object containing both light and dark versions of this icon.
+        """
+        self.icon = icon
+    
+    def ApplyTheme(self):
+        RibbonThemeMixin.ApplyTheme(self)
+        # also update icon
+        if self.icon is not None:
+            self.iconCtrl.SetBitmap(
+                self.icon.GetBitmap(height=16, style=self.theme.icons)
+            )
+
+        self.Update()
+        self.Refresh()
