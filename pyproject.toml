@@ -1,0 +1,38 @@
+[project]
+name = "wx-ribbon"
+version = "0.0.0" 
+description = "Package for adding a ribbon control in wx"
+readme = "README.md"
+authors = [
+  { name = "Todd Parsons", email = "todd.e.parsons@gmail.com" },
+]
+license = { text = "MIT" }
+dependencies = [
+  "wxPython",
+]
+
+[project.urls]
+# some handy links to help people find your plugin's documentation
+homepage = "https://github.com/TEParsons/wx-ribbon"
+changelog = "https://github.com/TEParsons/wx-ribbon/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+# dependencies for building the docs
+docs = [
+  "mkdocs",
+]
+# dependencies for running the test suite
+tests = [
+  "pytest",
+]
+
+[project.entry-points."wx"]
+FrameRibbon = "wx_ribbon.ribbon:FrameRibbon"
+
+[tool.setuptools.package-data]
+# any resources you want including in the package, add their file extensions here (e.g. "*.wav" if you want audio files)
+"*" = ["*.svg"] 
+
+[tool.setuptools.packages.find]
+# any folders to ignore when building the Python package for this plugin
+exclude = ["demos*", "docs*", "docs_src*", "tests*"]
