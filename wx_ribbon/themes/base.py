@@ -36,6 +36,31 @@ class BaseRibbonTheme:
         from . import ThemeConstantHandler
         # create constant for this class
         ThemeConstantHandler.RegisterThemeConstant(cls)
+    
+    @classmethod
+    def MakeDisabled(cls, color):
+        """
+        Get a disabled version of the given color.
+
+        Parameters
+        ----------
+        color : str
+            Can be supplied either as a hex code, or the name of an attribute.
+        
+        Returns
+        -------
+        str
+            The same color, dimmed against the background.
+        """
+        # if given an attribute, resolve it
+        if hasattr(cls, color):
+            color = getattr(cls, color)
+        # get luminance of background
+        lum = int(wx.Colour(cls.base).GetLuminance() * 255)
+        # make disabled variant
+        disabled = wx.Colour(color).MakeDisabled(lum)
+
+        return disabled.GetAsString(wx.C2S_HTML_SYNTAX)
 
 
 class RibbonThemeMixin:

@@ -223,14 +223,14 @@ class FrameRibbonSwitchCtrl(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
     conditional on this control's state.
     """
     def __init__(
-            self, parent, labels=("", ""), startMode=0,
+            self, parent, 
+            labels=("", ""),
+            startMode=0,
             callback=None,
             style=wx.HORIZONTAL
     ):
         wx.Panel.__init__(self, parent)
         self.parent = parent
-        # inherit theme
-        self.InheritTheme()
         # use style tag to get text alignment and control orientation
         alignh = style & (wx.BU_LEFT | wx.BU_RIGHT)
         alignv = style & (wx.BU_TOP | wx.BU_BOTTOM)
@@ -278,38 +278,32 @@ class FrameRibbonSwitchCtrl(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
             self.sizer.Insert(1, self.icon, **params)
         # make icons
         if orientation == wx.HORIZONTAL:
-            stems = ["switchCtrlLeft", "switchCtrlRight"]
-            size = (32, 16)
+            self.icons = [icons.RB_ICON_SWITCH_LEFT, icons.RB_ICON_SWITCH_RIGHT]
         else:
-            stems = ["switchCtrlTop", "switchCtrlBot"]
-            size = (16, 32)
-        self.icons = [
-            icons.ButtonIcon(stem, size=size) for stem in stems
-        ]
+            self.icons = [icons.RB_ICON_SWITCH_TOP, icons.RB_ICON_SWITCH_BOTTOM]
+        # inherit theme
+        self.InheritTheme()
         # set starting mode
-        self.setMode(startMode, silent=True)
+        self.SetMode(startMode, silent=True)
         # bind callback
         if callback is not None:
             self.Bind(EVT_RIBBON_SWITCH, callback)
 
         self.Layout()
+    
+    def ApplyTheme(self):
+        # use base theme method
+        RibbonThemeMixin.ApplyTheme(self)
+        # update background of all buttons
+        for btn in self.btns:
+            btn.SetBackgroundColour(self.theme.crust)
+        # update background of switch
+        self.icon.SetBackgroundColour(self.theme.crust)
 
-    def onModeSwitch(self, evt):
-        evtBtn = evt.GetEventObject()
-        # iterate through switch buttons
-        for mode, btn in enumerate(self.btns):
-            # if button matches this event...
-            if btn is evtBtn:
-                # change mode
-                self.setMode(mode)
-
-    def onModeToggle(self, evt=None):
-        if self.mode == 0:
-            self.setMode(1)
-        else:
-            self.setMode(0)
-
-    def setMode(self, mode, silent=False):
+        self.Update()
+        self.Refresh()
+    
+    def SetMode(self, mode, silent=False):
         # set mode
         self.mode = mode
         # iterate through switch buttons
@@ -317,11 +311,11 @@ class FrameRibbonSwitchCtrl(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
             # if it's the correct button...
             if btnMode == mode:
                 # style accordingly
-                btn.SetForegroundColour(colors.app['text'])
+                btn.SetForegroundColour(self.theme.text)
             else:
-                btn.SetForegroundColour(colors.app['rt_timegrid'])
+                btn.SetForegroundColour(self.theme.MakeDisabled(self.theme.text))
         # set icon
-        self.icon.SetBitmap(self.icons[mode].bitmap)
+        self.icon.SetBitmap(self.icons[mode].GetBitmap(height=28, style=self.theme.icons))
 
         # handle depends
         for depend in self.depends:
@@ -343,17 +337,32 @@ class FrameRibbonSwitchCtrl(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
         self.Update()
         self.GetTopLevelParent().Layout()
 
+    def onModeSwitch(self, evt):
+        evtBtn = evt.GetEventObject()
+        # iterate through switch buttons
+        for mode, btn in enumerate(self.btns):
+            # if button matches this event...
+            if btn is evtBtn:
+                # change mode
+                self.SetMode(mode)
+
+    def onModeToggle(self, evt=None):
+        if self.mode == 0:
+            self.SetMode(1)
+        else:
+            self.SetMode(0)
+
     def onHover(self, evt):
         if evt.EventType == wx.EVT_ENTER_WINDOW.typeId:
             # on hover, lighten background
-            evt.EventObject.SetForegroundColour(colors.app['text'])
+            evt.EventObject.SetForegroundColour(self.theme.text)
         else:
             # otherwise, keep same colour as parent
+            col = wx.Colour(self.theme.text)
             if evt.EventObject is self.btns[self.mode]:
-                evt.EventObject.SetForegroundColour(colors.app['text'])
+                evt.EventObject.SetForegroundColour(col)
             else:
-                evt.EventObject.SetForegroundColour(colors.app['rt_timegrid'])
-
+                evt.EventObject.SetForegroundColour(self.theme.MakeDisabled(self.theme.text))
     def addDependant(self, ctrl, mode, action="show"):
         """
         Connect another button to one mode of this ctrl such that it is shown/enabled only when
