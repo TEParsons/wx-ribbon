@@ -166,7 +166,7 @@ class FrameRibbonSection(wx.Panel, RibbonThemeMixin):
         # also update icon
         if self.icon is not None:
             self.iconCtrl.SetBitmap(
-                self.icon.GetBitmap(height=16, style=self.theme.icons)
+                self.icon.GetBitmap(height=12, style=self.theme.icons)
             )
 
         self.Update()
