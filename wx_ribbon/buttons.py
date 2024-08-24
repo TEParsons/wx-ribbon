@@ -187,6 +187,7 @@ class FrameRibbonDropdownButton(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixi
         RibbonThemeMixin.ApplyTheme(self)
         # update background of drop button
         self.drop.SetBackgroundColour(self.theme.crust)
+        self.drop.SetBackgroundColour(self.theme.text)
 
         self.Update()
         self.Refresh()
