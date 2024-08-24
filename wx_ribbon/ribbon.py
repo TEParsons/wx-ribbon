@@ -161,6 +161,8 @@ class FrameRibbonSection(wx.Panel, RibbonThemeMixin):
     
     def ApplyTheme(self):
         RibbonThemeMixin.ApplyTheme(self)
+        # update label
+        self.label.SetForegroundColour(self.theme.text)
         # also update icon
         if self.icon is not None:
             self.iconCtrl.SetBitmap(
