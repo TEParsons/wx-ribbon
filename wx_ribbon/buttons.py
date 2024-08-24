@@ -5,7 +5,7 @@ from wx_ribbon import ribbon, themes, icons
 from wx_ribbon.themes.base import RibbonThemeMixin
 
 
-class RibbonButtonMeta:
+class FrameRibbonButtonMeta:
     def __init_subclass__(cls):
         cls_name = cls.__name__.replace("FrameRibbon", "")
         fcn_name = f"Add{cls_name}"
@@ -50,7 +50,7 @@ class RibbonButtonMeta:
         )
 
 
-class FrameRibbonButton(wx.Button, RibbonButtonMeta, RibbonThemeMixin):
+class FrameRibbonButton(wx.Button, FrameRibbonButtonMeta, RibbonThemeMixin):
     """
     Button on a FrameRibbon.
 
@@ -135,7 +135,7 @@ class FrameRibbonButton(wx.Button, RibbonButtonMeta, RibbonThemeMixin):
             self.SetBackgroundColour(self.theme.crust)       
 
 
-class FrameRibbonDropdownButton(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
+class FrameRibbonDropdownButton(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixin):
     def __init__(self, parent, label, icon=None, callback=None, menu=None, style=wx.BU_LEFT):
         wx.Panel.__init__(self, parent)
         # setup sizer
@@ -217,7 +217,7 @@ class FrameRibbonDropdownButton(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
 EVT_RIBBON_SWITCH = wx.PyEventBinder(wx.IdManager.ReserveId())
 
 
-class FrameRibbonSwitchCtrl(wx.Panel, RibbonButtonMeta, RibbonThemeMixin):
+class FrameRibbonSwitchCtrl(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixin):
     """
     A switch with two modes. Use `addDependency` to make presentation of other buttons
     conditional on this control's state.
