@@ -219,7 +219,7 @@ EVT_RIBBON_SWITCH = wx.PyEventBinder(wx.IdManager.ReserveId())
 
 class FrameRibbonSwitchCtrl(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixin):
     """
-    A switch with two modes. Use `addDependency` to make presentation of other buttons
+    A switch with two modes. Use `AddDependency` to make presentation of other buttons
     conditional on this control's state.
     """
     def __init__(
@@ -363,7 +363,8 @@ class FrameRibbonSwitchCtrl(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixin):
                 evt.EventObject.SetForegroundColour(col)
             else:
                 evt.EventObject.SetForegroundColour(self.theme.MakeDisabled(self.theme.text))
-    def addDependant(self, ctrl, mode, action="show"):
+    
+    def AddDependant(self, ctrl, mode, action="show"):
         """
         Connect another button to one mode of this ctrl such that it is shown/enabled only when
         this ctrl is in that mode.
@@ -386,3 +387,8 @@ class FrameRibbonSwitchCtrl(wx.Panel, FrameRibbonButtonMeta, RibbonThemeMixin):
                 'ctrl': ctrl,  # to...
             }
         )
+        # do action once now
+        if action == "show":
+            ctrl.Show(self.mode == mode)
+        if action == "enable":
+            ctrl.Enable(self.mode == mode)
